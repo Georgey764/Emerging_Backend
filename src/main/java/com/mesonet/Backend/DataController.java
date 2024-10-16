@@ -123,6 +123,10 @@ public class DataController {
         }
     }
 
+    @GetMapping("/")
+    public String hello(){
+        return "Hello World!";
+    }
 }
 
 
