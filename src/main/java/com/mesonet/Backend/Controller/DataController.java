@@ -84,11 +84,11 @@ public class DataController {
     public List<String[]> data(int column) throws Exception{
         List<String[]> dataList = new ArrayList<>();
         try {
-            Scanner fileScanner = new Scanner(new ClassPathResource("data.csv").getFile());
+	    Scanner fileScanner = new Scanner(new ClassPathResource("data.csv").getFile());
             int counter = 0;
             String line = "";
 
-            while (fileScanner.hasNext() && counter < 25) {
+             while (fileScanner.hasNext() && counter < 25) {
                 line = fileScanner.nextLine();
 
                 if (column > line.length()){
@@ -119,6 +119,7 @@ public class DataController {
             List<String[]> dataList = data(dataMap.get(type.toUpperCase()));
             return new ResponseEntity<>(dataList, HttpStatus.OK);
         } catch (Exception e){
+	    System.out.println(e);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
