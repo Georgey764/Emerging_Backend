@@ -9,16 +9,16 @@ from django.db import models
 
 class BatteryData(models.Model):
     station_num = models.ForeignKey('MesonetStations', models.DO_NOTHING, db_column='station_num', blank=True, null=True)
-    timestamp = models.DateTimeField(db_column='TIMESTAMP', blank=True, null=True)  # Field name made lowercase.
-    batteryvoltage = models.DecimalField(db_column='BatteryVoltage', max_digits=10, decimal_places=2, blank=True, null=True)  # Field name made lowercase.
-    batterycurrent = models.DecimalField(db_column='BatteryCurrent', max_digits=10, decimal_places=2, blank=True, null=True)  # Field name made lowercase.
-    loadcurrent = models.DecimalField(db_column='LoadCurrent', max_digits=10, decimal_places=2, blank=True, null=True)  # Field name made lowercase.
-    chargeinputvoltage = models.DecimalField(db_column='ChargeInputVoltage', max_digits=10, decimal_places=2, blank=True, null=True)  # Field name made lowercase.
-    chargeinputcurrent = models.DecimalField(db_column='ChargeInputCurrent', max_digits=10, decimal_places=2, blank=True, null=True)  # Field name made lowercase.
-    chargetemp = models.DecimalField(db_column='ChargeTemp', max_digits=10, decimal_places=2, blank=True, null=True)  # Field name made lowercase.
-    chg_state = models.CharField(db_column='Chg_State', max_length=50, blank=True, null=True)  # Field name made lowercase.
-    chg_source = models.CharField(db_column='Chg_Source', max_length=50, blank=True, null=True)  # Field name made lowercase.
-    ck_batt = models.CharField(db_column='Ck_Batt', max_length=50, blank=True, null=True)  # Field name made lowercase.
+    timestamp = models.DateTimeField(db_column='TIMESTAMP', blank=True, null=True)
+    batteryvoltage = models.DecimalField(db_column='BatteryVoltage', max_digits=10, decimal_places=2, blank=True, null=True)
+    batterycurrent = models.DecimalField(db_column='BatteryCurrent', max_digits=10, decimal_places=2, blank=True, null=True) 
+    loadcurrent = models.DecimalField(db_column='LoadCurrent', max_digits=10, decimal_places=2, blank=True, null=True) 
+    chargeinputvoltage = models.DecimalField(db_column='ChargeInputVoltage', max_digits=10, decimal_places=2, blank=True, null=True)
+    chargeinputcurrent = models.DecimalField(db_column='ChargeInputCurrent', max_digits=10, decimal_places=2, blank=True, null=True)
+    chargetemp = models.DecimalField(db_column='ChargeTemp', max_digits=10, decimal_places=2, blank=True, null=True)
+    chg_state = models.CharField(db_column='Chg_State', max_length=50, blank=True, null=True)
+    chg_source = models.CharField(db_column='Chg_Source', max_length=50, blank=True, null=True) 
+    ck_batt = models.CharField(db_column='Ck_Batt', max_length=50, blank=True, null=True) 
 
     class Meta:
         managed = False
