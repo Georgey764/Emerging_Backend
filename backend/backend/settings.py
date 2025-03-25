@@ -30,7 +30,7 @@ SECRET_KEY = 'django-insecure-ccinvga6bq=#wcg!-yx#32d_3dt0ciw(rp^pl+li(dxo(bv(8x
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['mesonet.ulm.edu']
 
 
 # Application definition
