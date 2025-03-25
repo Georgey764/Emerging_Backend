@@ -59,13 +59,6 @@ def _generate_response(object_model, code, limit, station_number):
     return JsonResponse(all_data, safe=False, status=200)
 
 def get_stations_data(request):
-    host = request.META.get('HTTP_HOST', 'No Host header found')
-    origin = request.META.get('HTTP_ORIGIN', 'No Origin header found')
-    
-    # Print the Host header (can also use logging or other methods)
-    print("Request made by origin:", origin)
-    print("Request made to host:", host)
-
     station_number_str = request.GET.get('station_number', 'all')
 
     if station_number_str == "all":
