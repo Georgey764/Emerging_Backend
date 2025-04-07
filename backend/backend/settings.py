@@ -63,6 +63,8 @@ CORS_ALLOWED_ORIGINS = [
     os.getenv("ALLOWED_HEADER_3"),
     os.getenv("ALLOWED_HEADER_4")
 ]
+CORS_ALLOW_ALL_ORIGINS = False
+CORS_ALLOW_CREDENTIALS = True 
 
 ROOT_URLCONF = 'backend.urls'
 
