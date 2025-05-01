@@ -4,7 +4,7 @@ from .models import MesonetStations, WeatherConditions, BatteryData
 from decimal import Decimal
 import json, os, datetime
 
-station_limit = int(os.getenv("STATION_NUMBERS", "9"))
+station_limit = int(os.getenv("STATION_NUMBERS", "11"))
 
 invalid_code_message = {
     "message": "Invalid code",
@@ -112,6 +112,7 @@ def get_battery_data(request, station_number):
 
 def get_one_data_for_all_station(request, code):
     available_codes = {"ws_30ft_mph_avg"}
+    # if code in available_codes:
     data = [0] * station_limit
     for i in range(0, station_limit):
         data[i] = list(WeatherConditions.objects.filter(station_num=(i+1)).order_by("-timestamp").values(code, "station_num", "timestamp"))[:1]
