@@ -136,7 +136,7 @@ def get_soil_data(request, station_number):
     # actual response
     return _generate_response(object_model, code, limit, station_number)
 
-def get_temperature_pressure_data(request, station_number):
+def get_temperature_pressure(request, station_number):
     available_codes = {"station_num", "timestamp", "t109_30ft_f_avg", "t109_10ft_f_avg", "absbaro_inhg_avg", "sealvlbaro_inhg_avg", "heatindxtmpf_avg", "windchilltmpf_avg"}
     object_model = TemperaturePressure
 
