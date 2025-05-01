@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 
-from .models import MesonetStations, WeatherConditions, BatteryData
+from .models import MesonetStations, WeatherConditions, BatteryData, SoilData, TemperaturePressure
 from decimal import Decimal
 import json, os, datetime
 
@@ -118,7 +118,37 @@ def get_one_data_for_all_station(request, code):
         data[i] = list(WeatherConditions.objects.filter(station_num=(i+1)).order_by("-timestamp").values(code, "station_num", "timestamp"))[:1]
     return JsonResponse(data, safe=False, status=200)
 
+def get_soil_data(request, station_number):
+    available_codes = {"station_num", "timestamp", "vwc_5cm_avg", "ka_5cm_avg", "soiltmpf_5cm_avg", "bulkec_5cm_avg", "vwc_10cm_avg", "ka_10cm_avg", "soiltmpf_10cm_avg", 
+                       "bulkec_10cm_avg", "vwc_20cm_avg", "ka_20cm_avg", "soiltmpf_20cm_avg", "bulkec_20cm_avg", "vwc_30cm_avg", "ka_30cm_avg", "soiltmpf_30cm_avg", 
+                       "bulkec_30cm_avg", "vwc_40cm_avg", "ka_40cm_avg", "soiltmpf_40cm_avg", "bulkec_40cm_avg", "vwc_50cm_avg", "ka_50cm_avg", "soiltmpf_50cm_avg", 
+                       "bulkec_50cm_avg", "vwc_60cm_avg", "ka_60cm_avg", "soiltmpf_60cm_avg", "bulkec_60cm_avg", "vwc_75cm_avg", "ka_75cm_avg", "soiltmpf_75cm_avg", 
+                       "bulkec_75cm_avg", "vwc_100cm_avg", "ka_100cm_avg", "soiltmpf_100cm_avg", "bulkec_100cm_avg"}
+    object_model = SoilData
+
+    # code and limit validation
+    code = request.GET.get("code", "all").strip(",").split(",")
+    limit = int(request.GET.get("limit", "1"))
+    response = _validate_codes(code, limit, available_codes)
+    if isinstance(response, JsonResponse):
+        return response
     
+    # actual response
+    return _generate_response(object_model, code, limit, station_number)
+
+def get_temperature_pressure_data(request, station_number):
+    available_codes = {"station_num", "timestamp", "t109_30ft_f_avg", "t109_10ft_f_avg", "absbaro_inhg_avg", "sealvlbaro_inhg_avg", "heatindxtmpf_avg", "windchilltmpf_avg"}
+    object_model = TemperaturePressure
+
+    # code and limit validation
+    code = request.GET.get("code", "all").strip(",").split(",")
+    limit = int(request.GET.get("limit", "1"))
+    response = _validate_codes(code, limit, available_codes)
+    if isinstance(response, JsonResponse):
+        return response
+    
+    # actual response
+    return _generate_response(object_model, code, limit, station_number)
     
     # # validating api name
     # available_api = {"get_weather_condition", "get_battery_data"}
