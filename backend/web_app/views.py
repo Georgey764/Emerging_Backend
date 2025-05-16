@@ -19,7 +19,7 @@ not_found_message = {
     "status": "Not Found."
 }
 out_of_search_limit_message = {
-    'message': 'Limit should be within 1 and 100, inclusive.',
+    'message': 'Limit should be within 1 and 2016, inclusive.',
     'status': 'Not found'
 }
 api_not_available_message = {
@@ -35,9 +35,13 @@ def _convert_types(data):
     else:
         return data
     
-def _validate_codes(code, limit, available_codes):
-    if limit <= 0 or limit > 100:        
+def _validate_codes(code, limit, available_codes, interval=5):
+    if interval and interval < 5 or not interval % 5 == 0:
+        return JsonResponse(invalid_code_message, status=404)
+
+    if limit <= 0 or limit > 2016:        
         return JsonResponse(out_of_search_limit_message, status=404)
+    
     if len(code) > 1:
         print(code)
         for single_code in code:
@@ -48,15 +52,23 @@ def _validate_codes(code, limit, available_codes):
     else:
         return "VALID"
     
-def _generate_response(object_model, code, limit, station_number):
+def _generate_response(object_model, code, limit, station_number, interval=5):
     if code[0] == "all":
         all_data = list(object_model.objects.filter(station_num=station_number).order_by("-timestamp").values())[:limit]
     else:
         all_data = list(object_model.objects.filter(station_num=station_number).order_by("-timestamp").values(*code))[:limit]
-    for data in all_data:
-        for key, value in data.items():
-            data[key] = _convert_types(value)
-    return JsonResponse(all_data, safe=False, status=200)
+
+    result_data = []
+    for index, data in enumerate(all_data):
+        index_interval = interval / 5
+        # print(all_data)
+        if index % index_interval == 0:
+            result_object = {}
+            for key, value in data.items():
+                result_object[key] = _convert_types(value)
+            result_data.append(result_object)
+    # print(result_data)
+    return JsonResponse(result_data, safe=False, status=200)
 
 def get_stations_data(request):
     station_number_str = request.GET.get('station_number', 'all')
@@ -88,12 +100,13 @@ def get_weather_condition(request, station_number):
     # code and limit validation
     code = request.GET.get("code", "all").strip(",").split(",")
     limit = int(request.GET.get("limit", "1"))
-    response = _validate_codes(code, limit, available_codes)
+    interval = int(request.GET.get("interval", "5")) # must be a multiple of 5; minimum 0
+    response = _validate_codes(code, limit, available_codes, interval)
     if isinstance(response, JsonResponse):
         return response
 
     # actual response
-    return _generate_response(object_model, code, limit, station_number)
+    return _generate_response(object_model, code, limit, station_number, interval)
     
 def get_battery_data(request, station_number):
     available_codes = {"station_num", "timestamp", "batteryvoltage", "batterycurrent", "loadcurrent", "chargeinputvoltage", "chargeinputcurrent", "chargetemp", 
@@ -103,12 +116,13 @@ def get_battery_data(request, station_number):
     # code and limit validation
     code = request.GET.get("code", "all").strip(",").split(",")
     limit = int(request.GET.get("limit", "1"))
-    response = _validate_codes(code, limit, available_codes)
+    interval = int(request.GET.get("interval", "5"))
+    response = _validate_codes(code, limit, available_codes, interval)
     if isinstance(response, JsonResponse):
         return response
     
     # actual response
-    return _generate_response(object_model, code, limit, station_number)
+    return _generate_response(object_model, code, limit, station_number, interval)
 
 def get_one_data_for_all_station(request, code):
     available_codes = {"ws_30ft_mph_avg"}
@@ -129,12 +143,13 @@ def get_soil_data(request, station_number):
     # code and limit validation
     code = request.GET.get("code", "all").strip(",").split(",")
     limit = int(request.GET.get("limit", "1"))
-    response = _validate_codes(code, limit, available_codes)
+    interval = int(request.GET.get("interval", "5"))
+    response = _validate_codes(code, limit, available_codes, interval)
     if isinstance(response, JsonResponse):
         return response
     
     # actual response
-    return _generate_response(object_model, code, limit, station_number)
+    return _generate_response(object_model, code, limit, station_number, interval)
 
 def get_temperature_pressure(request, station_number):
     available_codes = {"station_num", "timestamp", "t109_30ft_f_avg", "t109_10ft_f_avg", "absbaro_inhg_avg", "sealvlbaro_inhg_avg", "heatindxtmpf_avg", "windchilltmpf_avg"}
@@ -143,12 +158,13 @@ def get_temperature_pressure(request, station_number):
     # code and limit validation
     code = request.GET.get("code", "all").strip(",").split(",")
     limit = int(request.GET.get("limit", "1"))
-    response = _validate_codes(code, limit, available_codes)
+    interval = int(request.GET.get("interval", "5"))
+    response = _validate_codes(code, limit, available_codes, interval)
     if isinstance(response, JsonResponse):
         return response
     
     # actual response
-    return _generate_response(object_model, code, limit, station_number)
+    return _generate_response(object_model, code, limit, station_number, interval)
     
     # # validating api name
     # available_api = {"get_weather_condition", "get_battery_data"}
