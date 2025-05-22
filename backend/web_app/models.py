@@ -88,21 +88,6 @@ class SoilData(models.Model):
         db_table = 'soil_data'
 
 
-class TemperaturePressure(models.Model):
-    station_num = models.ForeignKey(MesonetStations, models.DO_NOTHING, db_column='station_num', blank=True, null=True)
-    timestamp = models.DateTimeField(db_column='TIMESTAMP', blank=True, null=True)  # Field name made lowercase.
-    t109_30ft_f_avg = models.DecimalField(db_column='T109_30ft_F_Avg', max_digits=10, decimal_places=2, blank=True, null=True)  # Field name made lowercase.
-    t109_10ft_f_avg = models.DecimalField(db_column='T109_10ft_F_Avg', max_digits=10, decimal_places=2, blank=True, null=True)  # Field name made lowercase.
-    absbaro_inhg_avg = models.DecimalField(db_column='AbsBaro_inHg_Avg', max_digits=10, decimal_places=2, blank=True, null=True)  # Field name made lowercase.
-    sealvlbaro_inhg_avg = models.DecimalField(db_column='SeaLvlBaro_inHg_Avg', max_digits=10, decimal_places=2, blank=True, null=True)  # Field name made lowercase.
-    heatindxtmpf_avg = models.DecimalField(db_column='HeatIndxTmpF_Avg', max_digits=10, decimal_places=2, blank=True, null=True)  # Field name made lowercase.
-    windchilltmpf_avg = models.DecimalField(db_column='WindChillTmpF_Avg', max_digits=10, decimal_places=2, blank=True, null=True)  # Field name made lowercase.
-
-    class Meta:
-        managed = False
-        db_table = 'temperature_pressure'
-
-
 class WeatherConditions(models.Model):
     station_num = models.ForeignKey(MesonetStations, models.DO_NOTHING, db_column='station_num', blank=True, null=True)
     timestamp = models.DateTimeField(db_column='TIMESTAMP', blank=True, null=True)  # Field name made lowercase.
@@ -131,6 +116,12 @@ class WeatherConditions(models.Model):
     rv_tot_pre_accu = models.DecimalField(db_column='RV_Tot_Pre_Accu', max_digits=10, decimal_places=2, blank=True, null=True)  # Field name made lowercase.
     rv_avg_pre_int_max = models.DecimalField(db_column='RV_Avg_Pre_Int_Max', max_digits=10, decimal_places=2, blank=True, null=True)  # Field name made lowercase.
     rv_max_pre_int_max = models.DecimalField(db_column='RV_Max_Pre_Int_Max', max_digits=10, decimal_places=2, blank=True, null=True)  # Field name made lowercase.
+    t109_30ft_f_avg = models.DecimalField(db_column='T109_30ft_F_Avg', max_digits=10, decimal_places=2, blank=True, null=True)  # Field name made lowercase.
+    t109_10ft_f_avg = models.DecimalField(db_column='T109_10ft_F_Avg', max_digits=10, decimal_places=2, blank=True, null=True)  # Field name made lowercase.
+    absbaro_inhg_avg = models.DecimalField(db_column='AbsBaro_inHg_Avg', max_digits=10, decimal_places=2, blank=True, null=True)  # Field name made lowercase.
+    sealvlbaro_inhg_avg = models.DecimalField(db_column='SeaLvlBaro_inHg_Avg', max_digits=10, decimal_places=2, blank=True, null=True)  # Field name made lowercase.
+    heatindxtmpf_avg = models.DecimalField(db_column='HeatIndxTmpF_Avg', max_digits=10, decimal_places=2, blank=True, null=True)  # Field name made lowercase.
+    windchilltmpf_avg = models.DecimalField(db_column='WindChillTmpF_Avg', max_digits=10, decimal_places=2, blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
         managed = False

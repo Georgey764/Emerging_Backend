@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 
-from .models import MesonetStations, WeatherConditions, BatteryData, SoilData, TemperaturePressure
+from .models import MesonetStations, WeatherConditions, BatteryData, SoilData
 from decimal import Decimal
 import json, os, datetime
 
@@ -94,7 +94,8 @@ def get_weather_condition(request, station_number):
     available_codes = {"station_num", "timestamp", "record", "battv_avg", "ws_30ft_mph_avg", "ws_30ft_mph_max", "winddir_30ft_d1_wvt", "winddir_30ft_sd1_wvt", 
                     "ws_10ft_mph_avg", "ws_10ft_mph_max", "winddir_10ft_d1_wvt", "winddir_10ft_sd1_wvt", "ws_sonic_mph_avg", "ws_sonic_mph_max", "winddir_sonic_d1_wvt", 
                     "winddir_sonic_sd1_wvt", "airtf_avg", "rh_avg", "slrw_avg", "slrmj_tot", "dewptf", "rainsincemidnight", "rv_pre_accu_tot", "rv_tips_tot", 
-                    "rv_tot_pre_accu", "rv_avg_pre_int_max", "rv_max_pre_int_max"}
+                    "rv_tot_pre_accu", "rv_avg_pre_int_max", "rv_max_pre_int_max", "t109_30ft_f_avg", "t109_10ft_f_avg", "absbaro_inhg_avg", "sealvlbaro_inhg_avg", 
+                    "heatindxtmpf_avg", "windchilltmpf_avg"}
     object_model = WeatherConditions
 
     # code and limit validation
@@ -151,8 +152,7 @@ def get_soil_data(request, station_number):
     # actual response
     return _generate_response(object_model, code, limit, station_number, interval)
 
-def get_temperature_pressure(request, station_number):
-    available_codes = {"station_num", "timestamp", "t109_30ft_f_avg", "t109_10ft_f_avg", "absbaro_inhg_avg", "sealvlbaro_inhg_avg", "heatindxtmpf_avg", "windchilltmpf_avg"}
+    available_codes = {"station_num", "timestamp", }
     object_model = TemperaturePressure
 
     # code and limit validation
