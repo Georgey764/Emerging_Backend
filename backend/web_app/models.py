@@ -28,6 +28,7 @@ class BatteryData(models.Model):
 class MesonetStations(models.Model):
     station_number = models.IntegerField(primary_key=True)
     internal_station_id = models.CharField(unique=True, max_length=10, blank=True, null=True)
+    station_name = models.CharField(unique=True, max_length=100, blank=True, null=True)
     latitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
     longitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
     elevation_ft = models.IntegerField(blank=True, null=True)
