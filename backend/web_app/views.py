@@ -126,11 +126,18 @@ def get_battery_data(request, station_number):
     return _generate_response(object_model, code, limit, station_number, interval)
 
 def get_one_data_for_all_station(request, code):
-    available_codes = {"ws_30ft_mph_avg"}
+    available_codes = {"airtf_avg", "max_airtf_avg", "min_airtf_avg","ws_30ft_mph_avg", "max_ws_30ft_mph_max", "dewptf", "rainsincemidnight"}
     # if code in available_codes:
     data = [0] * station_limit
-    for i in range(0, station_limit):
-        data[i] = list(WeatherConditions.objects.filter(station_num=(i+1)).order_by("-timestamp").values(code, "station_num", "timestamp"))[:1]
+    if code.split("_")[0] in ["max", "min"]:
+        min_or_max = code.split("_")[0]
+        code = "_".join(code.split("_")[1:])
+        for i in range(0, station_limit):
+            unclean_data = list(WeatherConditions.objects.filter(station_num=(i+1)).order_by("-timestamp").values(code, "station_num", "timestamp"))[:288]
+            data[i] = [min(unclean_data, key=lambda x: x[code]) if min_or_max == "min" else max(unclean_data, key=lambda x: x[code])]
+    else:
+        for i in range(0, station_limit):
+            data[i] = list(WeatherConditions.objects.filter(station_num=(i+1)).order_by("-timestamp").values(code, "station_num", "timestamp"))[:1]
     return JsonResponse(data, safe=False, status=200)
 
 def get_soil_data(request, station_number):
