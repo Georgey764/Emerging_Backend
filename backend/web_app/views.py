@@ -4,7 +4,7 @@ from .models import MesonetStations, WeatherConditions, BatteryData, SoilData
 from decimal import Decimal
 import json, os, datetime
 
-station_limit = int(os.getenv("STATION_NUMBERS", "11"))
+station_limit = int(os.getenv("STATION_NUMBERS", "17"))
 
 invalid_code_message = {
     "message": "Invalid code",
@@ -134,7 +134,7 @@ def get_one_data_for_all_station(request, code):
         code = "_".join(code.split("_")[1:])
         for i in range(0, station_limit):
             unclean_data = list(WeatherConditions.objects.filter(station_num=(i+1)).order_by("-timestamp").values(code, "station_num", "timestamp"))[:288]
-            data[i] = [min(unclean_data, key=lambda x: x[code]) if min_or_max == "min" else max(unclean_data, key=lambda x: x[code])]
+            data[i] = [min(unclean_data, key=lambda x: x[code]) if min_or_max == "min" else max(unclean_data, key=lambda x: x[code])] 
     else:
         for i in range(0, station_limit):
             data[i] = list(WeatherConditions.objects.filter(station_num=(i+1)).order_by("-timestamp").values(code, "station_num", "timestamp"))[:1]
