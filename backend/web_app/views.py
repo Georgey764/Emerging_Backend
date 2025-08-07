@@ -75,11 +75,12 @@ def get_stations_data(request):
 
     if station_number_str == "all":
         stations_list = MesonetStations.objects.all().values()
-        for station in stations_list:
+        for station in range(0, station_limit):
             for key, value in station.items():
                 station[key] = _convert_types(value)
         return JsonResponse(list(stations_list), safe=False, status=200)
     
+    print(station_limit)
     station_number = int(station_number_str)
     # validating limit
     if station_number <= 0 or station_number > station_limit:

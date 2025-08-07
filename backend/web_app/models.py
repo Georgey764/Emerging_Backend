@@ -127,3 +127,42 @@ class WeatherConditions(models.Model):
     class Meta:
         managed = False
         db_table = 'weather_conditions'
+
+class WeatherExtreme(models.Model):
+    class IntervalType(models.TextChoices):
+        DAILY = 'daily', 'Daily'
+        WEEKLY = 'weekly', 'Weekly'
+        MONTHLY = 'monthly', 'Monthly'
+
+    station_num = models.ForeignKey(
+        'MesonetStations',
+        to_field='station_number',
+        db_column='station_num',
+        on_delete=models.CASCADE
+    )
+    interval_type = models.CharField(
+        max_length=10,
+        choices=IntervalType.choices
+    )
+    period_start = models.DateField()
+
+    max_temperature_fahrenheit = models.DecimalField(
+        max_digits=5, decimal_places=2, null=True, blank=True
+    )
+    min_temperature_fahrenheit = models.DecimalField(
+        max_digits=5, decimal_places=2, null=True, blank=True
+    )
+    max_windspeed_kph = models.DecimalField(
+        max_digits=5, decimal_places=2, null=True, blank=True
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('station_num', 'interval_type', 'period_start')
+        db_table = 'weather_extremes'
+
+    def __str__(self):
+        return f"Extreme @ Station {self.station_num_id} ({self.interval_type}, {self.period_start})"
+
