@@ -74,8 +74,8 @@ def get_stations_data(request):
     station_number_str = request.GET.get('station_number', 'all')
 
     if station_number_str == "all":
-        stations_list = MesonetStations.objects.all().values()
-        for station in range(0, station_limit):
+        stations_list = MesonetStations.objects.all().values()[:station_limit]
+        for index, station in enumerate(stations_list):
             for key, value in station.items():
                 station[key] = _convert_types(value)
         return JsonResponse(list(stations_list), safe=False, status=200)
